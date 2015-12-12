@@ -1,0 +1,8 @@
+Django
+djangorestframework
+django-toolbelt
+pytest
+pytest-django
+pytest-mock
+requests
+jsonfield
