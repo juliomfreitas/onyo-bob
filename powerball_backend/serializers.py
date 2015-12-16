@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from powerball_backend.engine import Engine
 from powerball_backend.models import Ticket, Prize
+from django.http import Http404
 
 
 class TicketSerializer(serializers.Serializer):
@@ -9,6 +10,22 @@ class TicketSerializer(serializers.Serializer):
 
     prize_code = serializers.CharField(read_only=True)
     ticket_code = serializers.CharField(read_only=True)
+
+    def winner(self):
+        ticket = Ticket.objects.filter(
+            prize__draw_date=self.validated_data["draw_date"],
+            numbers=self.validated_data["ticket"]
+        )
+        if not ticket:
+            raise Http404()
+
+        # not hadling duplicate ones
+        ticket = ticket[len(ticket) - 1]
+
+        if ticket.drawed():
+            return ticket.winning
+        else:
+            return False
 
     def save(self):
         tkt = Engine().generate_ticket()
