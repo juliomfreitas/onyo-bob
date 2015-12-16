@@ -7,7 +7,9 @@ import random
 
 class Engine:
 
-    def create_ticket(self):
+    def generate_ticket(self):
+        # randomize between ascii uppercase letters and digits
+        # The parameter is the string length of the code returned
         randcode = lambda N: ''.join(
             random.choice(
                 string.ascii_uppercase + string.digits
