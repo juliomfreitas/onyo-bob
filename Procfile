@@ -1,1 +1,1 @@
-web: gunicorn bob.wsgi
+web: gunicorn bob.wsgi --worker-class gevent
