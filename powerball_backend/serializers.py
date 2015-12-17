@@ -30,11 +30,12 @@ class TicketSerializer(serializers.Serializer):
     def save(self):
         tkt = Engine().generate_ticket()
 
-        prize = Prize(
+        prize, created = Prize.objects.get_or_create(
             draw_date=self.validated_data["draw_date"],
-            code=tkt['prize_code']
         )
-        prize.save()
+        if created:
+            prize.code = tkt['prize_code']
+            prize.save()
 
         ticket = Ticket(
             prize=prize,
@@ -44,5 +45,5 @@ class TicketSerializer(serializers.Serializer):
         )
         ticket.save()
 
-        self.validated_data['prize_code'] = tkt['prize_code']
-        self.validated_data['ticket_code'] = tkt['ticket_code']
+        self.validated_data['prize_code'] = prize.code
+        self.validated_data['ticket_code'] = ticket.code
