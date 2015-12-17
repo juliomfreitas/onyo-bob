@@ -25,7 +25,7 @@ class TicketSerializer(serializers.Serializer):
         if ticket.drawed():
             return ticket.winning
         else:
-            return False
+            return None
 
     def save(self):
         tkt = Engine().generate_ticket()
